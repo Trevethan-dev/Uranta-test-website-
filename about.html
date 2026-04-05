@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Uranta</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Trirong:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Quattrocento+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sand:      '#AB856C',
+            terra:     '#C17A4E',
+            azure:     '#4B6E8C',
+            olive:     '#716A50',
+            forest:    '#2C332E',
+            cream:     '#F7F2EC',
+            'cream-2': '#EDE6DC',
+          },
+          fontFamily: {
+            heading: ['Trirong', 'Georgia', 'serif'],
+            body:    ['Quattrocento Sans', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Quattrocento Sans', sans-serif;
+      background: #F7F2EC;
+      color: #2C332E;
+      overflow-x: hidden;
+    }
+
+    /* ── Grain texture overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* ── Typography ── */
+    .font-heading { font-family: 'Trirong', Georgia, serif; }
+    .font-body    { font-family: 'Quattrocento Sans', sans-serif; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 2.5rem;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease;
+      background: rgba(44,51,46,0.55);
+      backdrop-filter: blur(12px);
+    }
+    nav.scrolled {
+      background: rgba(247, 242, 236, 0.94);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 rgba(171,133,108,0.15);
+    }
+    .nav-logo {
+      height: 36px;
+      width: auto;
+      filter: invert(1);
+      mix-blend-mode: screen;
+      transition: opacity 0.25s ease;
+      flex-shrink: 0;
+    }
+    nav.scrolled .nav-logo { filter: none; mix-blend-mode: normal; }
+    .nav-left { display: flex; align-items: center; gap: 2.25rem; }
+    .nav-link {
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.875rem;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+      color: rgba(247, 242, 236, 0.88);
+      transition: color 0.2s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-link.active { color: #AB856C; }
+    nav.scrolled .nav-link { color: #2C332E; }
+    nav.scrolled .nav-link.active { color: #AB856C; }
+    .nav-link:hover { color: #F7F2EC; }
+    nav.scrolled .nav-link:hover { color: #AB856C; }
+
+    /* Collections dropdown */
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-toggle {
+      display: flex; align-items: center; gap: 0.35rem;
+      cursor: pointer; background: none; border: none; padding: 0;
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.875rem; letter-spacing: 0.11em; text-transform: uppercase;
+      color: rgba(247, 242, 236, 0.88);
+      transition: color 0.2s ease; white-space: nowrap;
+    }
+    nav.scrolled .nav-dropdown-toggle { color: #2C332E; }
+    .nav-dropdown-toggle:hover { color: #F7F2EC; }
+    nav.scrolled .nav-dropdown-toggle:hover { color: #AB856C; }
+    .nav-chevron { width: 10px; height: 10px; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1); flex-shrink: 0; }
+    .nav-dropdown:hover .nav-chevron { transform: rotate(180deg); }
+    .nav-dropdown-panel {
+      position: absolute; top: calc(100% + 4px); left: 50%;
+      transform: translateX(-50%) translateY(-6px); min-width: 210px;
+      background: rgba(247,242,236,0.97); backdrop-filter: blur(16px);
+      border: 1px solid rgba(171,133,108,0.18); border-radius: 4px;
+      box-shadow: 0 12px 40px rgba(44,51,46,0.13), 0 2px 8px rgba(44,51,46,0.07);
+      padding: 0.5rem 0; opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .nav-dropdown-panel::before {
+      content: ''; position: absolute; top: -12px; left: 0; right: 0; height: 12px;
+    }
+    .nav-dropdown:hover .nav-dropdown-panel { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+    .nav-dropdown-item {
+      display: block; font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #2C332E; text-decoration: none; padding: 0.65rem 1.5rem;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .nav-dropdown-item:hover { background: rgba(171,133,108,0.1); color: #AB856C; }
+    .nav-dropdown-divider { height: 1px; background: rgba(171,133,108,0.15); margin: 0.25rem 1rem; }
+
+    /* Nav right */
+    .nav-right { display: flex; align-items: center; gap: 0.25rem; }
+    .nav-icon-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 42px; height: 42px; border: none; background: none;
+      cursor: pointer; border-radius: 50%; color: rgba(247,242,236,0.85);
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    nav.scrolled .nav-icon-btn { color: #2C332E; }
+    .nav-icon-btn:hover { background: rgba(247,242,236,0.12); color: #F7F2EC; }
+    nav.scrolled .nav-icon-btn:hover { background: rgba(44,51,46,0.06); color: #AB856C; }
+    .nav-icon-btn svg { width: 21px; height: 21px; stroke-width: 1.5; }
+
+    /* Language switcher */
+    .nav-lang { position: relative; }
+    .nav-lang-toggle {
+      display: flex; align-items: center; gap: 0.3rem;
+      cursor: pointer; background: none; border: none; padding: 0 0.5rem; height: 42px;
+      font-family: 'Quattrocento Sans', sans-serif; font-size: 0.75rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(247,242,236,0.85); transition: color 0.2s ease;
+    }
+    nav.scrolled .nav-lang-toggle { color: #2C332E; }
+    .nav-lang-toggle:hover { color: #F7F2EC; }
+    nav.scrolled .nav-lang-toggle:hover { color: #AB856C; }
+    .nav-lang-chevron { width: 10px; height: 10px; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1); flex-shrink: 0; }
+    .nav-lang:hover .nav-lang-chevron { transform: rotate(180deg); }
+    .nav-lang-panel {
+      position: absolute; top: calc(100% + 4px); right: 0; min-width: 150px;
+      background: rgba(247,242,236,0.97); backdrop-filter: blur(16px);
+      border: 1px solid rgba(171,133,108,0.18); border-radius: 4px;
+      box-shadow: 0 12px 40px rgba(44,51,46,0.13), 0 2px 8px rgba(44,51,46,0.07);
+      padding: 0.5rem 0; opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      transform: translateY(-6px);
+    }
+    .nav-lang-panel::before { content: ''; position: absolute; top: -12px; left: 0; right: 0; height: 12px; }
+    .nav-lang:hover .nav-lang-panel { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .nav-lang-item {
+      display: block; width: 100%; text-align: left;
+      font-family: 'Quattrocento Sans', sans-serif; font-size: 0.8rem; letter-spacing: 0.08em;
+      color: #2C332E; background: none; border: none; padding: 0.65rem 1.25rem;
+      cursor: pointer; transition: background 0.15s ease, color 0.15s ease;
+    }
+    .nav-lang-item:hover { background: rgba(171,133,108,0.1); color: #AB856C; }
+    .nav-lang-item.active { color: #AB856C; font-weight: 700; }
+
+    /* ── Shared section styles ── */
+    .section-label {
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.22em;
+      text-transform: uppercase; color: #AB856C;
+    }
+    .section-title {
+      font-family: 'Trirong', Georgia, serif;
+      font-weight: 300; letter-spacing: -0.02em;
+      line-height: 1.15; color: #2C332E;
+    }
+    .divider {
+      width: 3rem; height: 1px; background: #AB856C; margin: 1.25rem auto;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-block;
+      font-family: 'Quattrocento Sans', sans-serif; font-size: 0.8125rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      background: #2C332E; color: #F7F2EC;
+      padding: 0.875rem 2.25rem; border: 1.5px solid #2C332E;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.25s ease, color 0.25s ease, transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
+    }
+    .btn-primary:hover {
+      background: #F7F2EC; color: #2C332E; transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(44,51,46,0.18), 0 2px 6px rgba(44,51,46,0.10);
+    }
+
+    /* ── Scroll-reveal ── */
+    body.js-ready .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    body.js-ready .reveal.revealed { opacity: 1; transform: translateY(0); }
+
+    /* ── Stat cards ── */
+    .stat-card {
+      text-align: center;
+      padding: 3rem 2rem;
+      border: 1px solid rgba(171,133,108,0.2);
+      background: rgba(247,242,236,0.6);
+    }
+    .stat-number {
+      font-family: 'Trirong', Georgia, serif;
+      font-size: clamp(3rem, 7vw, 5rem);
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      color: #AB856C;
+      line-height: 1;
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════
+       NAV
+  ══════════════════════════════════════ -->
+  <nav id="navbar">
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="brand_assets/uranta_logo.png" alt="Uranta" class="nav-logo" />
+      </a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-toggle" aria-haspopup="true">
+          Collections
+          <svg class="nav-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="2,3.5 5,6.5 8,3.5"/>
+          </svg>
+        </button>
+        <div class="nav-dropdown-panel" role="menu">
+          <a href="index.html#collections" class="nav-dropdown-item">Goa Magic Swimsuits</a>
+          <div class="nav-dropdown-divider"></div>
+          <a href="#" class="nav-dropdown-item">Bamboo</a>
+          <div class="nav-dropdown-divider"></div>
+          <a href="#" class="nav-dropdown-item">Organic Cotton</a>
+        </div>
+      </div>
+      <a href="about.html" class="nav-link active">About</a>
+      <a href="contact.html" class="nav-link">Contact Us</a>
+    </div>
+
+    <div class="nav-right">
+      <div class="nav-lang">
+        <button class="nav-lang-toggle" aria-haspopup="true" id="lang-toggle">
+          <span id="lang-current">EN</span>
+          <svg class="nav-lang-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="2,3.5 5,6.5 8,3.5"/>
+          </svg>
+        </button>
+        <div class="nav-lang-panel" role="menu">
+          <button class="nav-lang-item active" data-lang="EN" onclick="setLang('EN')">🇺🇸 English</button>
+          <button class="nav-lang-item" data-lang="ES" onclick="setLang('ES')">🇲🇽 Español</button>
+        </div>
+      </div>
+      <button class="nav-icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+        </svg>
+      </button>
+      <button class="nav-icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+      </button>
+      <button class="nav-icon-btn" aria-label="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
+  <section style="
+    position: relative;
+    min-height: 72vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    background: #2C332E;
+  ">
+    <!-- Warm radial overlays -->
+    <div style="position:absolute; inset:0; background:
+      radial-gradient(ellipse 70% 60% at 15% 80%, rgba(193,122,78,0.28) 0%, transparent 60%),
+      radial-gradient(ellipse 55% 50% at 85% 20%, rgba(75,110,140,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 80% at 50% 50%, rgba(44,51,46,0.0) 0%, rgba(20,25,22,0.6) 100%);
+      pointer-events:none;"></div>
+    <!-- Subtle grain -->
+    <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:0.04;" xmlns="http://www.w3.org/2000/svg">
+      <filter id="hero-grain"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter>
+      <rect width="100%" height="100%" filter="url(#hero-grain)"/>
+    </svg>
+
+    <div style="position:relative; z-index:2; max-width:700px; padding:0 2rem;">
+      <p class="font-body" style="font-size:0.75rem; letter-spacing:0.28em; text-transform:uppercase; color:#AB856C; margin-bottom:1.5rem;" data-i18n="about_hero_label">Uranta — Est. 2012</p>
+      <h1 class="font-heading" style="font-size: clamp(2.75rem,6vw,4.5rem); font-weight:300; letter-spacing:-0.025em; line-height:1.1; color:#F7F2EC; margin-bottom:1.75rem;" data-i18n="about_hero_title">
+        Clothing for<br /><em>a life in motion.</em>
+      </h1>
+      <p class="font-body" style="font-size:1.0625rem; line-height:1.8; color:rgba(247,242,236,0.62); max-width:480px; margin:0 auto;" data-i18n="about_hero_sub">
+        Born in Mexico. Built on movement, community, and a deep respect for the world we share.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       PHILOSOPHY
+  ══════════════════════════════════════ -->
+  <section style="padding:7rem 2rem; background:#F7F2EC;">
+    <div style="max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:6rem; align-items:center;">
+
+      <div class="reveal">
+        <p class="section-label" data-i18n="about_phil_label">Our Philosophy</p>
+        <div style="width:2.5rem; height:1px; background:#AB856C; margin:1.25rem 0;"></div>
+        <h2 class="section-title" style="font-size:clamp(2rem,3.5vw,2.75rem); margin-bottom:1.75rem;" data-i18n="about_phil_title">
+          Comfortable, creative,<br /><em>made with care.</em>
+        </h2>
+        <p class="font-body" style="font-size:1rem; line-height:1.85; color:#716A50; margin-bottom:1.25rem;" data-i18n="about_phil_p1">
+          At Uranta, we create clothing for a lifestyle. For people who celebrate their lives through the inspiration that movement gives — who like to dance, stretch, sweat, jump, and applaud every moment.
+        </p>
+        <p class="font-body" style="font-size:1rem; line-height:1.85; color:#716A50;" data-i18n="about_phil_p2">
+          Yoga, work, the market, the city, the countryside. Uranta is designed to accompany you in your daily life and to promote a lifestyle that is healthy, aware, and committed to the community.
+        </p>
+      </div>
+
+      <div class="reveal" style="transition-delay:0.15s; position:relative;">
+        <!-- Decorative quote block -->
+        <div style="
+          background:#EDE6DC;
+          padding:3.5rem 3rem;
+          position:relative;
+        ">
+          <div style="position:absolute; top:-1rem; left:-1rem; right:1rem; bottom:1rem; border:1.5px solid rgba(171,133,108,0.3); pointer-events:none;"></div>
+          <p class="font-heading" style="font-size:clamp(1.5rem,3vw,2.1rem); font-weight:300; line-height:1.4; letter-spacing:-0.01em; color:#2C332E; font-style:italic; margin-bottom:2rem;" data-i18n="about_phil_quote">
+            "We promote a healthy lifestyle, committed to the community and the environment we all share."
+          </p>
+          <div style="width:2rem; height:1px; background:#AB856C;"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       OUR STORY
+  ══════════════════════════════════════ -->
+  <section style="padding:7rem 2rem; background:#EDE6DC;">
+    <div style="max-width:1100px; margin:0 auto; text-align:center; margin-bottom:5rem;">
+      <p class="section-label reveal" data-i18n="about_story_label">Our Story</p>
+      <div class="divider reveal"></div>
+      <h2 class="section-title reveal" style="font-size:clamp(2rem,4vw,3rem); max-width:580px; margin:0 auto;" data-i18n="about_story_title">
+        Founded in 2012,<br /><em>rooted in Mexico.</em>
+      </h2>
+    </div>
+
+    <div style="max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr 1fr; gap:2.5rem;">
+
+      <div class="reveal" style="padding:2.5rem 2rem; background:rgba(247,242,236,0.65);">
+        <div style="width:2rem; height:2px; background:#AB856C; margin-bottom:1.75rem;"></div>
+        <h3 class="font-heading" style="font-size:1.25rem; font-weight:400; color:#2C332E; margin-bottom:1rem;" data-i18n="about_story_c1_title">San Juan Cosalá, Jalisco</h3>
+        <p class="font-body" style="font-size:0.9375rem; line-height:1.8; color:#716A50;" data-i18n="about_story_c1_body">
+          Created out of the need for comfortable, creative sportswear for people seeking deeper meaning in their lives. A small studio with a big vision.
+        </p>
+      </div>
+
+      <div class="reveal" style="padding:2.5rem 2rem; background:rgba(247,242,236,0.65); transition-delay:0.1s;">
+        <div style="width:2rem; height:2px; background:#AB856C; margin-bottom:1.75rem;"></div>
+        <h3 class="font-heading" style="font-size:1.25rem; font-weight:400; color:#2C332E; margin-bottom:1rem;" data-i18n="about_story_c2_title">One Big Family</h3>
+        <p class="font-body" style="font-size:0.9375rem; line-height:1.8; color:#716A50;" data-i18n="about_story_c2_body">
+          We work with a small team of incredible individuals. People who want to move forward, work fairly, and with purpose. People building a better society, one garment at a time.
+        </p>
+      </div>
+
+      <div class="reveal" style="padding:2.5rem 2rem; background:rgba(247,242,236,0.65); transition-delay:0.2s;">
+        <div style="width:2rem; height:2px; background:#AB856C; margin-bottom:1.75rem;"></div>
+        <h3 class="font-heading" style="font-size:1.25rem; font-weight:400; color:#2C332E; margin-bottom:1rem;" data-i18n="about_story_c3_title">A Conscious Connection</h3>
+        <p class="font-body" style="font-size:0.9375rem; line-height:1.8; color:#716A50;" data-i18n="about_story_c3_body">
+          We live in a time to awaken individual and collective conscience. Everyone and everything is connected — and our work is to strengthen those connections.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       THE EARTH
+  ══════════════════════════════════════ -->
+  <section style="
+    position:relative;
+    padding:7rem 2rem;
+    background:#2C332E;
+    overflow:hidden;
+  ">
+    <div style="position:absolute; inset:0; background:
+      radial-gradient(ellipse 60% 55% at 80% 30%, rgba(193,122,78,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 15% 70%, rgba(75,110,140,0.1) 0%, transparent 55%);
+      pointer-events:none;"></div>
+
+    <div style="position:relative; max-width:1100px; margin:0 auto;">
+      <div style="text-align:center; margin-bottom:5rem;">
+        <p class="section-label reveal" style="color:#AB856C;" data-i18n="about_earth_label">We Care for the Earth</p>
+        <div class="divider reveal"></div>
+        <h2 class="font-heading reveal" style="font-size:clamp(2rem,4vw,3rem); font-weight:300; letter-spacing:-0.02em; line-height:1.15; color:#F7F2EC; max-width:560px; margin:0 auto;" data-i18n="about_earth_title">
+          Upcycling as a<br /><em>way of life.</em>
+        </h2>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:start; max-width:900px; margin:0 auto;">
+
+        <div class="reveal">
+          <h3 class="font-heading" style="font-size:1.25rem; font-weight:400; color:#F7F2EC; margin-bottom:1rem;" data-i18n="about_earth_t1_title">Dead Stock Fabrics</h3>
+          <p class="font-body" style="font-size:0.9375rem; line-height:1.85; color:rgba(247,242,236,0.6);" data-i18n="about_earth_t1_body">
+            We work with fabrics no longer used on the cutting tables of large clothing companies — materials that would otherwise be wasted. We give them a new life. This is upcycling: transforming discarded materials into products of greater quality and environmental value.
+          </p>
+        </div>
+
+        <div class="reveal" style="transition-delay:0.15s;">
+          <h3 class="font-heading" style="font-size:1.25rem; font-weight:400; color:#F7F2EC; margin-bottom:1rem;" data-i18n="about_earth_t2_title">Less Than 3% Waste</h3>
+          <p class="font-body" style="font-size:0.9375rem; line-height:1.85; color:rgba(247,242,236,0.6);" data-i18n="about_earth_t2_body">
+            Our leftover fabric is less than 3% — used for bags and labels. The best remnants are donated to IMMI, who work with people living with cancer, sewing beautiful turbans. Nothing is wasted. Everything has a purpose.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       IMPACT NUMBERS
+  ══════════════════════════════════════ -->
+  <section style="padding:7rem 2rem; background:#F7F2EC;">
+    <div style="max-width:1100px; margin:0 auto;">
+      <div style="text-align:center; margin-bottom:5rem;">
+        <p class="section-label reveal" data-i18n="about_impact_label">The Difference</p>
+        <div class="divider reveal"></div>
+        <h2 class="section-title reveal" style="font-size:clamp(2rem,4vw,3rem); max-width:540px; margin:0 auto;" data-i18n="about_impact_title">
+          When you buy Uranta,<br />you vote for change.
+        </h2>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem;">
+
+        <div class="stat-card reveal">
+          <span class="stat-number" data-i18n="about_stat1_num">33%</span>
+          <p class="font-body" style="font-size:0.8rem; letter-spacing:0.18em; text-transform:uppercase; color:#716A50; margin-bottom:0.625rem;" data-i18n="about_stat1_label">More Water Saved</p>
+          <p class="font-body" style="font-size:0.875rem; line-height:1.7; color:#AB856C;" data-i18n="about_stat1_sub">compared to conventional brands</p>
+        </div>
+
+        <div class="stat-card reveal" style="transition-delay:0.1s;">
+          <span class="stat-number" data-i18n="about_stat2_num">87.8%</span>
+          <p class="font-body" style="font-size:0.8rem; letter-spacing:0.18em; text-transform:uppercase; color:#716A50; margin-bottom:0.625rem;" data-i18n="about_stat2_label">Less Waste Generated</p>
+          <p class="font-body" style="font-size:0.875rem; line-height:1.7; color:#AB856C;" data-i18n="about_stat2_sub">through upcycling and zero-waste production</p>
+        </div>
+
+        <div class="stat-card reveal" style="transition-delay:0.2s;">
+          <span class="stat-number" data-i18n="about_stat3_num">&lt;3%</span>
+          <p class="font-body" style="font-size:0.8rem; letter-spacing:0.18em; text-transform:uppercase; color:#716A50; margin-bottom:0.625rem;" data-i18n="about_stat3_label">Fabric Leftover</p>
+          <p class="font-body" style="font-size:0.875rem; line-height:1.7; color:#AB856C;" data-i18n="about_stat3_sub">the rest goes to bags, labels, or donation</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       THE CLOTHES
+  ══════════════════════════════════════ -->
+  <section style="padding:7rem 2rem; background:#EDE6DC;">
+    <div style="max-width:780px; margin:0 auto; text-align:center;">
+      <p class="section-label reveal" data-i18n="about_clothes_label">The Garments</p>
+      <div class="divider reveal"></div>
+      <h2 class="section-title reveal" style="font-size:clamp(2rem,4vw,3rem); margin-bottom:2rem;" data-i18n="about_clothes_title">
+        Each piece has a story.<br /><em>Each one is made with love.</em>
+      </h2>
+      <p class="font-body reveal" style="font-size:1.0625rem; line-height:1.85; color:#716A50; margin-bottom:1.5rem;" data-i18n="about_clothes_p1">
+        Every Uranta garment carries a unique thought and intention. Behind each design are hours of testing — adapting, refining, perfecting — until it moves with every body and fits every lifestyle.
+      </p>
+      <p class="font-body reveal" style="font-size:1.0625rem; line-height:1.85; color:#716A50; margin-bottom:3rem;" data-i18n="about_clothes_p2">
+        Almost all production is limited edition. Fabrics, colors, and designs shift with the seasons — because variety is honest, and honesty is beautiful.
+      </p>
+      <div class="reveal">
+        <a href="index.html#collections" class="btn-primary" data-i18n="about_clothes_cta">Shop the Collection</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer style="background:#1e2420; padding:4rem 2rem 2.5rem; color:rgba(247,242,236,0.55);">
+    <div style="max-width:1100px; margin:0 auto;">
+      <div style="display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:3rem; padding-bottom:3rem; border-bottom:1px solid rgba(247,242,236,0.08);">
+
+        <div>
+          <img src="brand_assets/uranta_logo.png" alt="Uranta" style="height:60px; width:auto; filter: invert(1); mix-blend-mode: screen; opacity:0.8; margin-bottom:1.25rem;" />
+          <p class="font-body" style="font-size:0.9rem; line-height:1.75; max-width:220px;" data-i18n="footer_brand_desc">
+            Yoga apparel crafted with intention, for the body in motion and the life well lived.
+          </p>
+        </div>
+
+        <div>
+          <p class="font-body" style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(247,242,236,0.35); margin-bottom:1.25rem;" data-i18n="footer_col_heading">Collections</p>
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.625rem;">
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_leggings">Leggings</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_bras">Sports Bras</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_outerwear">Outerwear</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_accessories">Accessories</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="font-body" style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(247,242,236,0.35); margin-bottom:1.25rem;" data-i18n="footer_company_heading">Company</p>
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.625rem;">
+            <li><a href="about.html" class="font-body" style="font-size:0.9rem; color:#AB856C; text-decoration:none;" data-i18n="footer_our_story">Our Story</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_sustainability">Sustainability</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_careers">Careers</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_press">Press</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="font-body" style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(247,242,236,0.35); margin-bottom:1.25rem;" data-i18n="footer_support_heading">Support</p>
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.625rem;">
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_size_guide">Size Guide</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_returns">Returns</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_shipping">Shipping</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_contact">Contact</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div style="padding-top:2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+        <p class="font-body" style="font-size:0.8rem;" data-i18n="footer_copy">© 2026 Uranta. All rights reserved.</p>
+        <div style="display:flex; gap:1.5rem;">
+          <a href="#" class="font-body" style="font-size:0.8rem; color:rgba(247,242,236,0.4); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'" data-i18n="footer_privacy">Privacy</a>
+          <a href="#" class="font-body" style="font-size:0.8rem; color:rgba(247,242,236,0.4); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'" data-i18n="footer_terms">Terms</a>
+          <a href="#" class="font-body" style="font-size:0.8rem; color:rgba(247,242,236,0.4); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'" data-i18n="footer_cookies">Cookies</a>
+        </div>
+        <div style="display:flex; gap:1rem; align-items:center;">
+          <a href="#" style="color:rgba(247,242,236,0.4); transition:color 0.2s;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+          </a>
+          <a href="#" style="color:rgba(247,242,236,0.4); transition:color 0.2s;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script>
+    // ── i18n ──────────────────────────────────────────────
+    const i18n = {
+      EN: {
+        about_hero_label: 'Uranta — Est. 2012',
+        about_hero_title: 'Clothing for<br /><em>a life in motion.</em>',
+        about_hero_sub: 'Born in Mexico. Built on movement, community, and a deep respect for the world we share.',
+        about_phil_label: 'Our Philosophy',
+        about_phil_title: 'Comfortable, creative,<br /><em>made with care.</em>',
+        about_phil_p1: 'At Uranta, we create clothing for a lifestyle. For people who celebrate their lives through the inspiration that movement gives — who like to dance, stretch, sweat, jump, and applaud every moment.',
+        about_phil_p2: 'Yoga, work, the market, the city, the countryside. Uranta is designed to accompany you in your daily life and to promote a lifestyle that is healthy, aware, and committed to the community.',
+        about_phil_quote: '"We promote a healthy lifestyle, committed to the community and the environment we all share."',
+        about_story_label: 'Our Story',
+        about_story_title: 'Founded in 2012,<br /><em>rooted in Mexico.</em>',
+        about_story_c1_title: 'San Juan Cosalá, Jalisco',
+        about_story_c1_body: 'Created out of the need for comfortable, creative sportswear for people seeking deeper meaning in their lives. A small studio with a big vision.',
+        about_story_c2_title: 'One Big Family',
+        about_story_c2_body: 'We work with a small team of incredible individuals. People who want to move forward, work fairly, and with purpose. People building a better society, one garment at a time.',
+        about_story_c3_title: 'A Conscious Connection',
+        about_story_c3_body: 'We live in a time to awaken individual and collective conscience. Everyone and everything is connected — and our work is to strengthen those connections.',
+        about_earth_label: 'We Care for the Earth',
+        about_earth_title: 'Upcycling as a<br /><em>way of life.</em>',
+        about_earth_t1_title: 'Dead Stock Fabrics',
+        about_earth_t1_body: 'We work with fabrics no longer used on the cutting tables of large clothing companies — materials that would otherwise be wasted. We give them a new life. This is upcycling: transforming discarded materials into products of greater quality and environmental value.',
+        about_earth_t2_title: 'Less Than 3% Waste',
+        about_earth_t2_body: 'Our leftover fabric is less than 3% — used for bags and labels. The best remnants are donated to IMMI, who work with people living with cancer, sewing beautiful turbans. Nothing is wasted. Everything has a purpose.',
+        about_impact_label: 'The Difference',
+        about_impact_title: 'When you buy Uranta,<br />you vote for change.',
+        about_stat1_num: '33%', about_stat1_label: 'More Water Saved', about_stat1_sub: 'compared to conventional brands',
+        about_stat2_num: '87.8%', about_stat2_label: 'Less Waste Generated', about_stat2_sub: 'through upcycling and zero-waste production',
+        about_stat3_num: '<3%', about_stat3_label: 'Fabric Leftover', about_stat3_sub: 'the rest goes to bags, labels, or donation',
+        about_clothes_label: 'The Garments',
+        about_clothes_title: 'Each piece has a story.<br /><em>Each one is made with love.</em>',
+        about_clothes_p1: 'Every Uranta garment carries a unique thought and intention. Behind each design are hours of testing — adapting, refining, perfecting — until it moves with every body and fits every lifestyle.',
+        about_clothes_p2: 'Almost all production is limited edition. Fabrics, colors, and designs shift with the seasons — because variety is honest, and honesty is beautiful.',
+        about_clothes_cta: 'Shop the Collection',
+        footer_brand_desc: 'Yoga apparel crafted with intention, for the body in motion and the life well lived.',
+        footer_col_heading: 'Collections', footer_leggings: 'Leggings', footer_bras: 'Sports Bras', footer_outerwear: 'Outerwear', footer_accessories: 'Accessories',
+        footer_company_heading: 'Company', footer_our_story: 'Our Story', footer_sustainability: 'Sustainability', footer_careers: 'Careers', footer_press: 'Press',
+        footer_support_heading: 'Support', footer_size_guide: 'Size Guide', footer_returns: 'Returns', footer_shipping: 'Shipping', footer_contact: 'Contact',
+        footer_copy: '© 2026 Uranta. All rights reserved.', footer_privacy: 'Privacy', footer_terms: 'Terms', footer_cookies: 'Cookies'
+      },
+      ES: {
+        about_hero_label: 'Uranta — Est. 2012',
+        about_hero_title: 'Ropa para<br /><em>una vida en movimiento.</em>',
+        about_hero_sub: 'Nacida en México. Construida sobre el movimiento, la comunidad y el respeto profundo por el mundo que compartimos.',
+        about_phil_label: 'Nuestra Filosofía',
+        about_phil_title: 'Cómoda, creativa,<br /><em>hecha con cuidado.</em>',
+        about_phil_p1: 'En Uranta creamos ropa para un estilo de vida. Para personas que celebran sus vidas a través de la inspiración que da el movimiento — que les gusta bailar, estirarse, sudar, saltar y aplaudir cada momento.',
+        about_phil_p2: 'Yoga, trabajo, el súper, la ciudad, el campo. Uranta está diseñada para acompañarte en tu vida diaria y promover un estilo de vida saludable, consciente y comprometido con la comunidad.',
+        about_phil_quote: '"Promovemos un estilo de vida saludable, comprometido con la comunidad y el medio ambiente que todos compartimos."',
+        about_story_label: 'Nuestra Historia',
+        about_story_title: 'Fundada en 2012,<br /><em>con raíces en México.</em>',
+        about_story_c1_title: 'San Juan Cosalá, Jalisco',
+        about_story_c1_body: 'Creada por la necesidad de ropa deportiva cómoda y creativa para personas que buscan un significado más profundo en sus vidas. Un pequeño taller con una gran visión.',
+        about_story_c2_title: 'Una Gran Familia',
+        about_story_c2_body: 'Trabajamos con un pequeño equipo de personas increíbles. Gente que quiere salir adelante, trabajar de manera justa y con propósito. Personas construyendo una mejor sociedad, una prenda a la vez.',
+        about_story_c3_title: 'Una Conexión Consciente',
+        about_story_c3_body: 'Vivimos en un tiempo para despertar la conciencia individual y colectiva. Todos y todo está conectado — y nuestro trabajo es fortalecer esas conexiones.',
+        about_earth_label: 'Cuidamos la Tierra',
+        about_earth_title: 'El upcycling como<br /><em>forma de vida.</em>',
+        about_earth_t1_title: 'Telas Dead Stock',
+        about_earth_t1_body: 'Trabajamos con telas que ya no se usan en las mesas de corte de las grandes empresas de ropa — materiales que de otro modo serían desechados. Les damos una nueva vida. Esto es upcycling: transformar materiales descartados en productos de mayor calidad y valor ambiental.',
+        about_earth_t2_title: 'Menos del 3% de Desperdicio',
+        about_earth_t2_body: 'Nuestro sobrante de tela es menos del 3% — usado en bolsas y etiquetas. Los mejores retazos se donan a IMMI, quienes trabajan con personas que viven con cáncer, cosiendo hermosos turbantes. Nada se desperdicia. Todo tiene un propósito.',
+        about_impact_label: 'La Diferencia',
+        about_impact_title: 'Cuando compras Uranta,<br />votas por el cambio.',
+        about_stat1_num: '33%', about_stat1_label: 'Más Agua Ahorrada', about_stat1_sub: 'comparado con marcas convencionales',
+        about_stat2_num: '87.8%', about_stat2_label: 'Menos Desperdicio', about_stat2_sub: 'gracias al upcycling y producción cero residuos',
+        about_stat3_num: '<3%', about_stat3_label: 'Sobrante de Tela', about_stat3_sub: 'el resto va a bolsas, etiquetas o donación',
+        about_clothes_label: 'Las Prendas',
+        about_clothes_title: 'Cada pieza tiene una historia.<br /><em>Cada una está hecha con amor.</em>',
+        about_clothes_p1: 'Cada prenda Uranta lleva un pensamiento e intención únicos. Detrás de cada diseño hay horas de pruebas — adaptando, refinando, perfeccionando — hasta que se mueve con cada cuerpo y encaja en cada estilo de vida.',
+        about_clothes_p2: 'Casi toda la producción es edición limitada. Telas, colores y diseños cambian con las temporadas — porque la variedad es honesta, y la honestidad es hermosa.',
+        about_clothes_cta: 'Ver la Colección',
+        footer_brand_desc: 'Ropa de yoga creada con intención, para el cuerpo en movimiento y la vida bien vivida.',
+        footer_col_heading: 'Colecciones', footer_leggings: 'Leggings', footer_bras: 'Tops Deportivos', footer_outerwear: 'Ropa Exterior', footer_accessories: 'Accesorios',
+        footer_company_heading: 'Empresa', footer_our_story: 'Nuestra Historia', footer_sustainability: 'Sustentabilidad', footer_careers: 'Empleos', footer_press: 'Prensa',
+        footer_support_heading: 'Soporte', footer_size_guide: 'Guía de Tallas', footer_returns: 'Devoluciones', footer_shipping: 'Envíos', footer_contact: 'Contacto',
+        footer_copy: '© 2026 Uranta. Todos los derechos reservados.', footer_privacy: 'Privacidad', footer_terms: 'Términos', footer_cookies: 'Cookies'
+      }
+    };
+
+    function setLang(lang) {
+      const t = i18n[lang];
+      document.getElementById('lang-current').textContent = lang;
+      document.querySelectorAll('.nav-lang-item').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+      document.documentElement.lang = lang === 'ES' ? 'es' : 'en';
+    }
+
+    // ── Nav scroll ─────────────────────────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── Scroll reveal ──────────────────────────────────────
+    requestAnimationFrame(() => {
+      document.body.classList.add('js-ready');
+      const reveals = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+      reveals.forEach(el => observer.observe(el));
+    });
+  </script>
+
+</body>
+</html>

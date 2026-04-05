@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Uranta</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Trirong:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Quattrocento+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sand: '#AB856C', terra: '#C17A4E', azure: '#4B6E8C',
+            olive: '#716A50', forest: '#2C332E', cream: '#F7F2EC', 'cream-2': '#EDE6DC',
+          },
+          fontFamily: {
+            heading: ['Trirong', 'Georgia', 'serif'],
+            body: ['Quattrocento Sans', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Quattrocento Sans', sans-serif; background: #F7F2EC; color: #2C332E; overflow-x: hidden; }
+
+    body::before {
+      content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 9999; opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    .font-heading { font-family: 'Trirong', Georgia, serif; }
+    .font-body    { font-family: 'Quattrocento Sans', sans-serif; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 0 2.5rem; height: 68px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease;
+      background: rgba(247,242,236,0.94); backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 rgba(171,133,108,0.15);
+    }
+    nav.scrolled {
+      background: rgba(247,242,236,0.94); backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 rgba(171,133,108,0.15);
+    }
+    .nav-logo { height: 36px; width: auto; filter: none; mix-blend-mode: normal; transition: opacity 0.25s ease; flex-shrink: 0; }
+    nav.scrolled .nav-logo { filter: none; mix-blend-mode: normal; }
+    .nav-left { display: flex; align-items: center; gap: 2.25rem; }
+    .nav-link {
+      font-family: 'Quattrocento Sans', sans-serif; font-size: 0.875rem; letter-spacing: 0.11em;
+      text-transform: uppercase; color: #2C332E;
+      transition: color 0.2s ease; text-decoration: none; white-space: nowrap;
+    }
+    .nav-link.active { color: #AB856C; }
+    .nav-link:hover { color: #AB856C; }
+
+    .nav-dropdown { position: relative; }
+    .nav-dropdown-toggle {
+      display: flex; align-items: center; gap: 0.35rem; cursor: pointer;
+      background: none; border: none; padding: 0;
+      font-family: 'Quattrocento Sans', sans-serif; font-size: 0.875rem; letter-spacing: 0.11em;
+      text-transform: uppercase; color: #2C332E; transition: color 0.2s ease; white-space: nowrap;
+    }
+    .nav-dropdown-toggle:hover { color: #AB856C; }
+    .nav-chevron { width: 10px; height: 10px; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1); flex-shrink: 0; }
+    .nav-dropdown:hover .nav-chevron { transform: rotate(180deg); }
+    .nav-dropdown-panel {
+      position: absolute; top: calc(100% + 4px); left: 50%;
+      transform: translateX(-50%) translateY(-6px); min-width: 210px;
+      background: rgba(247,242,236,0.97); backdrop-filter: blur(16px);
+      border: 1px solid rgba(171,133,108,0.18); border-radius: 4px;
+      box-shadow: 0 12px 40px rgba(44,51,46,0.13), 0 2px 8px rgba(44,51,46,0.07);
+      padding: 0.5rem 0; opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .nav-dropdown-panel::before { content: ''; position: absolute; top: -12px; left: 0; right: 0; height: 12px; }
+    .nav-dropdown:hover .nav-dropdown-panel { opacity: 1; pointer-events: auto; transform: translateX(-50%) translateY(0); }
+    .nav-dropdown-item {
+      display: block; font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+      color: #2C332E; text-decoration: none; padding: 0.65rem 1.5rem;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .nav-dropdown-item:hover { background: rgba(171,133,108,0.1); color: #AB856C; }
+    .nav-dropdown-divider { height: 1px; background: rgba(171,133,108,0.15); margin: 0.25rem 1rem; }
+
+    .nav-right { display: flex; align-items: center; gap: 0.25rem; }
+    .nav-icon-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 42px; height: 42px; border: none; background: none;
+      cursor: pointer; border-radius: 50%; color: #2C332E;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    .nav-icon-btn:hover { background: rgba(44,51,46,0.06); color: #AB856C; }
+    .nav-icon-btn svg { width: 21px; height: 21px; stroke-width: 1.5; }
+
+    .nav-lang { position: relative; }
+    .nav-lang-toggle {
+      display: flex; align-items: center; gap: 0.3rem; cursor: pointer;
+      background: none; border: none; padding: 0 0.5rem; height: 42px;
+      font-family: 'Quattrocento Sans', sans-serif; font-size: 0.75rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: #2C332E; transition: color 0.2s ease;
+    }
+    .nav-lang-toggle:hover { color: #AB856C; }
+    .nav-lang-chevron { width: 10px; height: 10px; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1); flex-shrink: 0; }
+    .nav-lang:hover .nav-lang-chevron { transform: rotate(180deg); }
+    .nav-lang-panel {
+      position: absolute; top: calc(100% + 4px); right: 0; min-width: 150px;
+      background: rgba(247,242,236,0.97); backdrop-filter: blur(16px);
+      border: 1px solid rgba(171,133,108,0.18); border-radius: 4px;
+      box-shadow: 0 12px 40px rgba(44,51,46,0.13), 0 2px 8px rgba(44,51,46,0.07);
+      padding: 0.5rem 0; opacity: 0; pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      transform: translateY(-6px);
+    }
+    .nav-lang-panel::before { content: ''; position: absolute; top: -12px; left: 0; right: 0; height: 12px; }
+    .nav-lang:hover .nav-lang-panel { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .nav-lang-item {
+      display: block; width: 100%; text-align: left;
+      font-family: 'Quattrocento Sans', sans-serif; font-size: 0.8rem; letter-spacing: 0.08em;
+      color: #2C332E; background: none; border: none; padding: 0.65rem 1.25rem;
+      cursor: pointer; transition: background 0.15s ease, color 0.15s ease;
+    }
+    .nav-lang-item:hover { background: rgba(171,133,108,0.1); color: #AB856C; }
+    .nav-lang-item.active { color: #AB856C; font-weight: 700; }
+
+    /* ── Form fields ── */
+    .field-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .field-label {
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #AB856C;
+    }
+    .field-input {
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.9375rem; color: #2C332E;
+      background: transparent; border: none;
+      border-bottom: 1.5px solid rgba(44,51,46,0.2);
+      padding: 0.75rem 0; outline: none; width: 100%;
+      transition: border-color 0.2s ease;
+    }
+    .field-input::placeholder { color: rgba(44,51,46,0.3); }
+    .field-input:focus { border-bottom-color: #AB856C; }
+    textarea.field-input { resize: none; min-height: 120px; }
+
+    /* ── Button ── */
+    .btn-submit {
+      display: inline-flex; align-items: center; gap: 0.75rem;
+      font-family: 'Quattrocento Sans', sans-serif; font-size: 0.8125rem;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      background: #2C332E; color: #F7F2EC;
+      padding: 0.9375rem 2.5rem; border: 1.5px solid #2C332E; cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease,
+                  transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.25s ease;
+    }
+    .btn-submit:hover {
+      background: #F7F2EC; color: #2C332E; transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(44,51,46,0.18), 0 2px 6px rgba(44,51,46,0.10);
+    }
+    .btn-submit:active { transform: translateY(0); }
+
+    /* ── Success state ── */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+    .form-success.visible { display: block; }
+
+    /* ── Scroll-reveal ── */
+    body.js-ready .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    body.js-ready .reveal.revealed { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════
+       NAV
+  ══════════════════════════════════════ -->
+  <nav id="navbar">
+    <div class="nav-left">
+      <a href="index.html">
+        <img src="brand_assets/uranta_logo.png" alt="Uranta" class="nav-logo" />
+      </a>
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-toggle" aria-haspopup="true">
+          Collections
+          <svg class="nav-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="2,3.5 5,6.5 8,3.5"/>
+          </svg>
+        </button>
+        <div class="nav-dropdown-panel" role="menu">
+          <a href="index.html#collections" class="nav-dropdown-item">Goa Magic Swimsuits</a>
+          <div class="nav-dropdown-divider"></div>
+          <a href="#" class="nav-dropdown-item">Bamboo</a>
+          <div class="nav-dropdown-divider"></div>
+          <a href="#" class="nav-dropdown-item">Organic Cotton</a>
+        </div>
+      </div>
+      <a href="about.html" class="nav-link">About</a>
+      <a href="contact.html" class="nav-link active">Contact Us</a>
+    </div>
+
+    <div class="nav-right">
+      <div class="nav-lang">
+        <button class="nav-lang-toggle" aria-haspopup="true" id="lang-toggle">
+          <span id="lang-current">EN</span>
+          <svg class="nav-lang-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="2,3.5 5,6.5 8,3.5"/>
+          </svg>
+        </button>
+        <div class="nav-lang-panel" role="menu">
+          <button class="nav-lang-item active" data-lang="EN" onclick="setLang('EN')">🇺🇸 English</button>
+          <button class="nav-lang-item" data-lang="ES" onclick="setLang('ES')">🇲🇽 Español</button>
+        </div>
+      </div>
+      <button class="nav-icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/>
+        </svg>
+      </button>
+      <button class="nav-icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+      </button>
+      <button class="nav-icon-btn" aria-label="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ══════════════════════════════════════
+       MAIN
+  ══════════════════════════════════════ -->
+  <main style="min-height: 100vh; display: flex; align-items: center; padding: 10rem 2rem 7rem;">
+    <div style="max-width: 1100px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 7rem; align-items: start;">
+
+      <!-- Left: heading + info -->
+      <div class="reveal">
+        <p class="font-body" style="font-size:0.75rem; letter-spacing:0.22em; text-transform:uppercase; color:#AB856C; margin-bottom:1.25rem;" data-i18n="contact_label">Get in Touch</p>
+        <div style="width:2.5rem; height:1px; background:#AB856C; margin-bottom:1.75rem;"></div>
+        <h1 class="font-heading" style="font-size:clamp(2.25rem,5vw,3.5rem); font-weight:300; letter-spacing:-0.025em; line-height:1.12; color:#2C332E; margin-bottom:1.75rem;" data-i18n="contact_title">
+          We'd love to<br /><em>hear from you.</em>
+        </h1>
+        <p class="font-body" style="font-size:1rem; line-height:1.85; color:#716A50; margin-bottom:3rem;" data-i18n="contact_sub">
+          Have a question about a garment, an order, or just want to say hello? Write to us — we read every message and always write back.
+        </p>
+
+        <!-- Contact details -->
+        <div style="display:flex; flex-direction:column; gap:1.75rem;">
+          <div>
+            <p class="font-body" style="font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:#AB856C; margin-bottom:0.375rem;" data-i18n="contact_location_label">Location</p>
+            <p class="font-body" style="font-size:0.9375rem; color:#2C332E; line-height:1.6;">San Juan Cosalá, Jalisco, México</p>
+          </div>
+          <div>
+            <p class="font-body" style="font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:#AB856C; margin-bottom:0.375rem;" data-i18n="contact_instagram_label">Instagram</p>
+            <p class="font-body" style="font-size:0.9375rem; color:#2C332E;">@uranta_mx</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div class="reveal" style="transition-delay:0.15s;">
+        <form id="contact-form" onsubmit="handleSubmit(event)" style="display:flex; flex-direction:column; gap:2.25rem;">
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:2rem;">
+            <div class="field-group">
+              <label class="field-label" for="name" data-i18n="contact_name_label">Name</label>
+              <input class="field-input" type="text" id="name" name="name" placeholder="Sofia Martínez" required data-i18n-placeholder="contact_name_ph" />
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="phone" data-i18n="contact_phone_label">Phone</label>
+              <input class="field-input" type="tel" id="phone" name="phone" placeholder="+52 33 1234 5678" data-i18n-placeholder="contact_phone_ph" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="email" data-i18n="contact_email_label">Email</label>
+            <input class="field-input" type="email" id="email" name="email" placeholder="sofia@example.com" required data-i18n-placeholder="contact_email_ph" />
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="message" data-i18n="contact_message_label">Message</label>
+            <textarea class="field-input" id="message" name="message" placeholder="Tell us what's on your mind…" required data-i18n-placeholder="contact_message_ph"></textarea>
+          </div>
+
+          <div>
+            <button type="submit" class="btn-submit" data-i18n="contact_submit">
+              Send Message
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </button>
+          </div>
+
+        </form>
+
+        <!-- Success message -->
+        <div class="form-success" id="form-success">
+          <div style="width:3rem; height:1px; background:#AB856C; margin:0 auto 1.5rem;"></div>
+          <h2 class="font-heading" style="font-size:1.75rem; font-weight:300; color:#2C332E; margin-bottom:0.875rem;" data-i18n="contact_success_title">Message sent.</h2>
+          <p class="font-body" style="font-size:0.9375rem; line-height:1.8; color:#716A50;" data-i18n="contact_success_sub">Thank you for reaching out. We'll be in touch soon.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer style="background:#1e2420; padding:4rem 2rem 2.5rem; color:rgba(247,242,236,0.55);">
+    <div style="max-width:1100px; margin:0 auto;">
+      <div style="display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:3rem; padding-bottom:3rem; border-bottom:1px solid rgba(247,242,236,0.08);">
+        <div>
+          <img src="brand_assets/uranta_logo.png" alt="Uranta" style="height:60px; width:auto; filter: invert(1); mix-blend-mode: screen; opacity:0.8; margin-bottom:1.25rem;" />
+          <p class="font-body" style="font-size:0.9rem; line-height:1.75; max-width:220px;" data-i18n="footer_brand_desc">Yoga apparel crafted with intention, for the body in motion and the life well lived.</p>
+        </div>
+        <div>
+          <p class="font-body" style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(247,242,236,0.35); margin-bottom:1.25rem;" data-i18n="footer_col_heading">Collections</p>
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.625rem;">
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_leggings">Leggings</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_bras">Sports Bras</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_outerwear">Outerwear</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_accessories">Accessories</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-body" style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(247,242,236,0.35); margin-bottom:1.25rem;" data-i18n="footer_company_heading">Company</p>
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.625rem;">
+            <li><a href="about.html" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_our_story">Our Story</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_sustainability">Sustainability</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_careers">Careers</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_press">Press</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-body" style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(247,242,236,0.35); margin-bottom:1.25rem;" data-i18n="footer_support_heading">Support</p>
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.625rem;">
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_size_guide">Size Guide</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_returns">Returns</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'" data-i18n="footer_shipping">Shipping</a></li>
+            <li><a href="contact.html" class="font-body" style="font-size:0.9rem; color:#AB856C; text-decoration:none;" data-i18n="footer_contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div style="padding-top:2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+        <p class="font-body" style="font-size:0.8rem;" data-i18n="footer_copy">© 2026 Uranta. All rights reserved.</p>
+        <div style="display:flex; gap:1.5rem;">
+          <a href="#" class="font-body" style="font-size:0.8rem; color:rgba(247,242,236,0.4); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'" data-i18n="footer_privacy">Privacy</a>
+          <a href="#" class="font-body" style="font-size:0.8rem; color:rgba(247,242,236,0.4); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'" data-i18n="footer_terms">Terms</a>
+          <a href="#" class="font-body" style="font-size:0.8rem; color:rgba(247,242,236,0.4); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'" data-i18n="footer_cookies">Cookies</a>
+        </div>
+        <div style="display:flex; gap:1rem; align-items:center;">
+          <a href="#" style="color:rgba(247,242,236,0.4); transition:color 0.2s;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+          </a>
+          <a href="#" style="color:rgba(247,242,236,0.4); transition:color 0.2s;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── i18n ──────────────────────────────────────────────
+    const i18n = {
+      EN: {
+        contact_label: 'Get in Touch',
+        contact_title: 'We\'d love to<br /><em>hear from you.</em>',
+        contact_sub: 'Have a question about a garment, an order, or just want to say hello? Write to us — we read every message and always write back.',
+        contact_location_label: 'Location', contact_instagram_label: 'Instagram',
+        contact_name_label: 'Name', contact_name_ph: 'Sofia Martínez',
+        contact_phone_label: 'Phone', contact_phone_ph: '+52 33 1234 5678',
+        contact_email_label: 'Email', contact_email_ph: 'sofia@example.com',
+        contact_message_label: 'Message', contact_message_ph: 'Tell us what\'s on your mind…',
+        contact_submit: 'Send Message',
+        contact_success_title: 'Message sent.',
+        contact_success_sub: 'Thank you for reaching out. We\'ll be in touch soon.',
+        footer_brand_desc: 'Yoga apparel crafted with intention, for the body in motion and the life well lived.',
+        footer_col_heading: 'Collections', footer_leggings: 'Leggings', footer_bras: 'Sports Bras', footer_outerwear: 'Outerwear', footer_accessories: 'Accessories',
+        footer_company_heading: 'Company', footer_our_story: 'Our Story', footer_sustainability: 'Sustainability', footer_careers: 'Careers', footer_press: 'Press',
+        footer_support_heading: 'Support', footer_size_guide: 'Size Guide', footer_returns: 'Returns', footer_shipping: 'Shipping', footer_contact: 'Contact',
+        footer_copy: '© 2026 Uranta. All rights reserved.', footer_privacy: 'Privacy', footer_terms: 'Terms', footer_cookies: 'Cookies'
+      },
+      ES: {
+        contact_label: 'Contáctanos',
+        contact_title: 'Nos encantaría<br /><em>saber de ti.</em>',
+        contact_sub: '¿Tienes una pregunta sobre una prenda, un pedido, o simplemente quieres saludar? Escríbenos — leemos cada mensaje y siempre respondemos.',
+        contact_location_label: 'Ubicación', contact_instagram_label: 'Instagram',
+        contact_name_label: 'Nombre', contact_name_ph: 'Sofia Martínez',
+        contact_phone_label: 'Teléfono', contact_phone_ph: '+52 33 1234 5678',
+        contact_email_label: 'Correo', contact_email_ph: 'sofia@ejemplo.com',
+        contact_message_label: 'Mensaje', contact_message_ph: 'Cuéntanos qué tienes en mente…',
+        contact_submit: 'Enviar Mensaje',
+        contact_success_title: 'Mensaje enviado.',
+        contact_success_sub: 'Gracias por escribirnos. Nos pondremos en contacto pronto.',
+        footer_brand_desc: 'Ropa de yoga creada con intención, para el cuerpo en movimiento y la vida bien vivida.',
+        footer_col_heading: 'Colecciones', footer_leggings: 'Leggings', footer_bras: 'Tops Deportivos', footer_outerwear: 'Ropa Exterior', footer_accessories: 'Accesorios',
+        footer_company_heading: 'Empresa', footer_our_story: 'Nuestra Historia', footer_sustainability: 'Sustentabilidad', footer_careers: 'Empleos', footer_press: 'Prensa',
+        footer_support_heading: 'Soporte', footer_size_guide: 'Guía de Tallas', footer_returns: 'Devoluciones', footer_shipping: 'Envíos', footer_contact: 'Contacto',
+        footer_copy: '© 2026 Uranta. Todos los derechos reservados.', footer_privacy: 'Privacidad', footer_terms: 'Términos', footer_cookies: 'Cookies'
+      }
+    };
+
+    function setLang(lang) {
+      const t = i18n[lang];
+      document.getElementById('lang-current').textContent = lang;
+      document.querySelectorAll('.nav-lang-item').forEach(btn => btn.classList.toggle('active', btn.dataset.lang === lang));
+      document.querySelectorAll('[data-i18n]').forEach(el => { if (t[el.dataset.i18n] !== undefined) el.innerHTML = t[el.dataset.i18n]; });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { if (t[el.dataset.i18nPlaceholder] !== undefined) el.placeholder = t[el.dataset.i18nPlaceholder]; });
+      document.documentElement.lang = lang === 'ES' ? 'es' : 'en';
+    }
+
+    // ── Form submit ────────────────────────────────────────
+    function handleSubmit(e) {
+      e.preventDefault();
+      document.getElementById('contact-form').style.display = 'none';
+      document.getElementById('form-success').classList.add('visible');
+    }
+
+    // ── Nav scroll ─────────────────────────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // ── Scroll reveal ──────────────────────────────────────
+    requestAnimationFrame(() => {
+      document.body.classList.add('js-ready');
+      const reveals = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('revealed'); observer.unobserve(entry.target); } });
+      }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+      reveals.forEach(el => observer.observe(el));
+    });
+  </script>
+
+</body>
+</html>
