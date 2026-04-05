@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Uranta — Aligned in Balance. In Beauty.</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Trirong:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Quattrocento+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            sand:      '#AB856C',
+            terra:     '#C17A4E',
+            azure:     '#4B6E8C',
+            olive:     '#716A50',
+            forest:    '#2C332E',
+            cream:     '#F7F2EC',
+            'cream-2': '#EDE6DC',
+          },
+          fontFamily: {
+            heading: ['Trirong', 'Georgia', 'serif'],
+            body:    ['Quattrocento Sans', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Quattrocento Sans', sans-serif;
+      background: #F7F2EC;
+      color: #2C332E;
+      overflow-x: hidden;
+    }
+
+    /* ── Grain texture overlay ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+    }
+
+    /* ── Typography ── */
+    .font-heading { font-family: 'Trirong', Georgia, serif; }
+    .font-body    { font-family: 'Quattrocento Sans', sans-serif; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 2.5rem;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s ease, backdrop-filter 0.4s ease, box-shadow 0.4s ease;
+    }
+    nav.scrolled {
+      background: rgba(247, 242, 236, 0.94);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 rgba(171,133,108,0.15);
+    }
+
+    /* Nav logo */
+    .nav-logo {
+      height: 36px;
+      width: auto;
+      filter: invert(1);
+      mix-blend-mode: screen;
+      transition: opacity 0.25s ease;
+      flex-shrink: 0;
+    }
+    nav.scrolled .nav-logo {
+      filter: none;
+      mix-blend-mode: normal;
+      opacity: 1;
+    }
+
+    /* Nav left group: logo + links */
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 2.25rem;
+    }
+
+    /* Nav links */
+    .nav-link {
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: rgba(247, 242, 236, 0.88);
+      transition: color 0.2s ease, opacity 0.2s ease;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    nav.scrolled .nav-link { color: #2C332E; }
+    .nav-link:hover { color: #F7F2EC; opacity: 1; }
+    nav.scrolled .nav-link:hover { color: #AB856C; }
+
+    /* Collections dropdown */
+    .nav-dropdown {
+      position: relative;
+    }
+    .nav-dropdown-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      color: rgba(247, 242, 236, 0.88);
+      transition: color 0.2s ease;
+      white-space: nowrap;
+    }
+    nav.scrolled .nav-dropdown-toggle { color: #2C332E; }
+    .nav-dropdown-toggle:hover { color: #F7F2EC; }
+    nav.scrolled .nav-dropdown-toggle:hover { color: #AB856C; }
+
+    /* Chevron icon */
+    .nav-chevron {
+      width: 10px;
+      height: 10px;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      flex-shrink: 0;
+    }
+    .nav-dropdown:hover .nav-chevron { transform: rotate(180deg); }
+
+    /* Dropdown panel */
+    .nav-dropdown-panel {
+      position: absolute;
+      top: calc(100% + 18px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-6px);
+      min-width: 210px;
+      background: rgba(247, 242, 236, 0.97);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(171, 133, 108, 0.18);
+      border-radius: 4px;
+      box-shadow: 0 12px 40px rgba(44,51,46,0.13), 0 2px 8px rgba(44,51,46,0.07);
+      padding: 0.5rem 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .nav-dropdown:hover .nav-dropdown-panel {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    .nav-dropdown-item {
+      display: block;
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #2C332E;
+      text-decoration: none;
+      padding: 0.65rem 1.5rem;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .nav-dropdown-item:hover {
+      background: rgba(171, 133, 108, 0.1);
+      color: #AB856C;
+    }
+    .nav-dropdown-divider {
+      height: 1px;
+      background: rgba(171,133,108,0.15);
+      margin: 0.25rem 1rem;
+    }
+
+    /* Nav right: icon buttons */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+    .nav-icon-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-radius: 50%;
+      color: rgba(247, 242, 236, 0.85);
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    nav.scrolled .nav-icon-btn { color: #2C332E; }
+    .nav-icon-btn:hover {
+      background: rgba(247, 242, 236, 0.12);
+      color: #F7F2EC;
+    }
+    nav.scrolled .nav-icon-btn:hover {
+      background: rgba(44, 51, 46, 0.06);
+      color: #AB856C;
+    }
+    .nav-icon-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke-width: 1.5;
+    }
+
+    /* ── Buttons ── */
+    .btn-primary {
+      display: inline-block;
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.8125rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: #2C332E;
+      color: #F7F2EC;
+      padding: 0.875rem 2.25rem;
+      border: 1.5px solid #2C332E;
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease, transform 0.18s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      background: #F7F2EC;
+      color: #2C332E;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(44,51,46,0.18), 0 2px 6px rgba(44,51,46,0.10);
+    }
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-outline {
+      display: inline-block;
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.8125rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: transparent;
+      color: #F7F2EC;
+      padding: 0.875rem 2.25rem;
+      border: 1.5px solid rgba(247, 242, 236, 0.6);
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+      text-decoration: none;
+    }
+    .btn-outline:hover {
+      background: rgba(247, 242, 236, 0.12);
+      border-color: #F7F2EC;
+      transform: translateY(-2px);
+    }
+
+    .btn-dark-outline {
+      display: inline-block;
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.8125rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: transparent;
+      color: #2C332E;
+      padding: 0.875rem 2.25rem;
+      border: 1.5px solid #2C332E;
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease, transform 0.18s cubic-bezier(0.34,1.56,0.64,1);
+      text-decoration: none;
+    }
+    .btn-dark-outline:hover {
+      background: #2C332E;
+      color: #F7F2EC;
+      transform: translateY(-2px);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 80%, rgba(193,122,78,0.22) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 20%, rgba(75,110,140,0.16) 0%, transparent 55%),
+        linear-gradient(to bottom, rgba(44,51,46,0.45) 0%, rgba(44,51,46,0.3) 50%, rgba(44,51,46,0.65) 100%);
+    }
+
+    /* ── Section headings ── */
+    .section-label {
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #AB856C;
+    }
+    .section-title {
+      font-family: 'Trirong', Georgia, serif;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: #2C332E;
+    }
+
+    /* ── Product card ── */
+    .product-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .product-card img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+      display: block;
+    }
+    .product-card:hover img { transform: scale(1.05); }
+    .product-card .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(44,51,46,0.72) 0%, rgba(44,51,46,0.08) 50%, transparent 100%);
+      transition: opacity 0.3s ease;
+    }
+    .product-card .card-cta {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      white-space: nowrap;
+    }
+    .product-card:hover .card-cta {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .product-card .card-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 1.5rem;
+      transform: translateY(0);
+      transition: transform 0.3s ease;
+    }
+    .product-card:hover .card-info { transform: translateY(-3rem); }
+
+    /* ── Goa Magic product cards ── */
+    .goa-card-inner {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .goa-img-wrap {
+      position: relative;
+      overflow: hidden;
+      background: #C4B8A8;
+      aspect-ratio: 3 / 4;
+    }
+    .goa-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      transition: transform 0.65s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .goa-card:hover .goa-img { transform: scale(1.06); }
+
+    .goa-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 40%,
+        rgba(44,51,46,0.55) 100%
+      );
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+    .goa-card:hover .goa-img-overlay { opacity: 1; }
+
+    .goa-shop-btn {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.32s cubic-bezier(0.34,1.56,0.64,1);
+      display: flex;
+      align-items: center;
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #F7F2EC;
+      background: rgba(44,51,46,0.75);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(247,242,236,0.25);
+      padding: 0.625rem 1.375rem;
+      white-space: nowrap;
+    }
+    .goa-card:hover .goa-shop-btn {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .goa-card-body {
+      padding: 1.375rem 0.125rem 0;
+    }
+    .goa-card-title {
+      font-size: 1.3125rem;
+      font-weight: 400;
+      color: #2C332E;
+      letter-spacing: -0.01em;
+      margin: 0;
+      transition: color 0.2s ease;
+    }
+    .goa-card:hover .goa-card-title { color: #AB856C; }
+    .goa-card-price {
+      font-size: 0.875rem;
+      color: #716A50;
+      white-space: nowrap;
+    }
+    .goa-card-sub {
+      font-size: 0.775rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #AB856C;
+      margin: 0;
+    }
+    .goa-card-bar {
+      width: 0;
+      height: 1px;
+      background: #AB856C;
+      margin-top: 1rem;
+      transition: width 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .goa-card:hover .goa-card-bar { width: 100%; }
+
+    @media (max-width: 768px) {
+      #collections > div > div[style*="grid-template-columns: repeat(3"] {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
+    /* ── Testimonial ── */
+    .testimonial-card {
+      background: white;
+      padding: 2.5rem;
+      position: relative;
+      box-shadow:
+        0 2px 8px rgba(44,51,46,0.06),
+        0 8px 32px rgba(44,51,46,0.04);
+    }
+    .testimonial-card::before {
+      content: '"';
+      font-family: 'Trirong', serif;
+      font-size: 5rem;
+      line-height: 1;
+      color: #AB856C;
+      opacity: 0.25;
+      position: absolute;
+      top: 0.5rem;
+      left: 1.5rem;
+    }
+
+    /* ── Feature icon ── */
+    .feature-icon {
+      width: 3rem;
+      height: 3rem;
+      border: 1.5px solid #AB856C;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      width: 3rem;
+      height: 1px;
+      background: #AB856C;
+      margin: 1.25rem auto;
+    }
+
+    /* ── Newsletter ── */
+    .newsletter-input {
+      background: transparent;
+      border: none;
+      border-bottom: 1.5px solid rgba(247,242,236,0.4);
+      padding: 0.75rem 0;
+      font-family: 'Quattrocento Sans', sans-serif;
+      font-size: 0.9375rem;
+      color: #F7F2EC;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+    .newsletter-input::placeholder { color: rgba(247,242,236,0.45); }
+    .newsletter-input:focus { border-bottom-color: #AB856C; }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.8s cubic-bezier(0.25,0.46,0.45,0.94) both; }
+    .delay-1 { animation-delay: 0.15s; }
+    .delay-2 { animation-delay: 0.30s; }
+    .delay-3 { animation-delay: 0.45s; }
+    .delay-4 { animation-delay: 0.60s; }
+
+    /* ── Scroll-reveal (JS adds .js-ready to body, then reveals on scroll) ── */
+    body.js-ready .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    body.js-ready .reveal.revealed { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════
+       NAV
+  ══════════════════════════════════════ -->
+  <nav id="navbar">
+
+    <!-- Left: logo + links -->
+    <div class="nav-left">
+      <a href="#">
+        <img src="brand_assets/uranta_logo.png" alt="Uranta" class="nav-logo" />
+      </a>
+
+      <!-- Collections with dropdown -->
+      <div class="nav-dropdown">
+        <button class="nav-dropdown-toggle" aria-haspopup="true">
+          Collections
+          <svg class="nav-chevron" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="2,3.5 5,6.5 8,3.5"/>
+          </svg>
+        </button>
+        <div class="nav-dropdown-panel" role="menu">
+          <a href="#collections" class="nav-dropdown-item">Goa Magic Swimsuits</a>
+          <div class="nav-dropdown-divider"></div>
+          <a href="#" class="nav-dropdown-item">Bamboo</a>
+          <div class="nav-dropdown-divider"></div>
+          <a href="#" class="nav-dropdown-item">Organic Cotton</a>
+        </div>
+      </div>
+
+      <a href="#" class="nav-link">About</a>
+      <a href="#" class="nav-link">Contact Us</a>
+    </div>
+
+    <!-- Right: icon buttons -->
+    <div class="nav-right">
+      <!-- Search -->
+      <button class="nav-icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="16.5" y1="16.5" x2="22" y2="22"/>
+        </svg>
+      </button>
+      <!-- Profile -->
+      <button class="nav-icon-btn" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+        </svg>
+      </button>
+      <!-- Cart -->
+      <button class="nav-icon-btn" aria-label="Cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+      </button>
+    </div>
+
+  </nav>
+
+  <!-- ══════════════════════════════════════
+       HERO
+  ══════════════════════════════════════ -->
+  <section class="hero">
+    <video
+      class="hero-video"
+      src="website_media/1551683cca2942408d20d38e2ec5a045.HD-1080p-7.2Mbps-63055664.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    ></video>
+    <!-- Logo: absolutely placed before overlay, no opacity animation so mix-blend-mode works -->
+    <img
+      src="brand_assets/uranta_logo.png"
+      alt="Uranta — espacio en el espíritu interior"
+      style="
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -260%);
+        height: 130px;
+        width: auto;
+        z-index: 2;
+        filter: invert(1);
+        mix-blend-mode: screen;
+        pointer-events: none;
+      "
+    />
+
+    <div class="hero-overlay" style="z-index: 3;"></div>
+
+    <div class="relative px-6" style="max-width: 680px; z-index: 4;">
+
+      <!-- Headline -->
+      <h1 class="fade-up font-heading text-cream" style="font-size: clamp(2.5rem,6vw,4.25rem); font-weight:300; letter-spacing:-0.025em; line-height:1.12; margin-bottom:1.5rem;">
+        Move with grace.<br /><em>Dress with intention.</em>
+      </h1>
+
+      <!-- Sub -->
+      <p class="fade-up delay-2 font-body text-cream" style="font-size:1.0625rem; line-height:1.75; opacity:0.72; max-width:440px; margin:0 auto 2.5rem;">
+        Yoga apparel crafted for the body in motion — where ancient balance meets conscious design.
+      </p>
+
+      <!-- CTAs -->
+      <div class="fade-up delay-3 flex items-center justify-center gap-4 flex-wrap">
+        <a href="#collections" class="btn-primary">Shop the Collection</a>
+        <a href="#story" class="btn-outline">Our Story</a>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="fade-up delay-4 absolute bottom-10 left-1/2" style="transform:translateX(-50%);">
+      <div style="width:1px; height:48px; background: linear-gradient(to bottom, transparent, rgba(247,242,236,0.5)); margin: 0 auto 0.5rem;"></div>
+      <p class="font-body text-cream" style="font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; opacity:0.5;">Scroll</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       BRAND VALUES
+  ══════════════════════════════════════ -->
+  <section style="padding: 7rem 2rem; background: #F7F2EC;">
+    <div style="max-width: 1100px; margin: 0 auto; text-align: center;">
+      <p class="section-label reveal">Our Philosophy</p>
+      <div class="divider reveal"></div>
+      <h2 class="section-title reveal" style="font-size: clamp(2rem,4vw,3rem); max-width:600px; margin:0 auto 5rem;">
+        Clothing that honours<br />your practice
+      </h2>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:3rem;">
+
+        <!-- Value 1 -->
+        <div class="reveal">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#AB856C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2z"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <h3 class="font-heading" style="font-size:1.375rem; font-weight:400; margin-bottom:0.875rem; color:#2C332E;">Freedom of Movement</h3>
+          <p class="font-body" style="font-size:0.9375rem; line-height:1.75; color:#716A50; max-width:260px; margin:0 auto;">
+            Every seam and stitch is engineered to move as you move — nothing held back, nothing holding you back.
+          </p>
+        </div>
+
+        <!-- Value 2 -->
+        <div class="reveal" style="transition-delay:0.12s;">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#AB856C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3 class="font-heading" style="font-size:1.375rem; font-weight:400; margin-bottom:0.875rem; color:#2C332E;">Consciously Crafted</h3>
+          <p class="font-body" style="font-size:0.9375rem; line-height:1.75; color:#716A50; max-width:260px; margin:0 auto;">
+            Sustainable fabrics, ethical production, and a deep respect for the planet that grounds our practice.
+          </p>
+        </div>
+
+        <!-- Value 3 -->
+        <div class="reveal" style="transition-delay:0.24s;">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#AB856C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+            </svg>
+          </div>
+          <h3 class="font-heading" style="font-size:1.375rem; font-weight:400; margin-bottom:0.875rem; color:#2C332E;">Timeless Elegance</h3>
+          <p class="font-body" style="font-size:0.9375rem; line-height:1.75; color:#716A50; max-width:260px; margin:0 auto;">
+            Beyond the studio — pieces that carry the calm of your practice into every moment of the day.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       COLLECTIONS — GOA MAGIC
+  ══════════════════════════════════════ -->
+  <section id="collections" style="padding: 6rem 2rem 7rem; background: #EDE6DC;">
+    <div style="max-width: 1160px; margin: 0 auto;">
+
+      <!-- Heading -->
+      <div style="text-align:center; margin-bottom:4.5rem;">
+        <p class="section-label reveal">Goa Magic</p>
+        <div class="divider reveal"></div>
+        <h2 class="section-title reveal" style="font-size: clamp(2rem,4vw,3rem);">Goa Magic Swimsuits</h2>
+        <p class="font-body reveal" style="margin-top:1rem; font-size:1rem; line-height:1.75; color:#716A50; max-width:420px; margin-left:auto; margin-right:auto;">
+          One-piece swimsuits designed for women who move through the world with confidence and ease.
+        </p>
+      </div>
+
+      <!-- 3-column product grid -->
+      <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:2rem;">
+
+        <!-- The Classic -->
+        <a href="#PRODUCT_URL_CLASSIC" class="goa-card reveal" style="text-decoration:none; display:block; color:inherit;">
+          <div class="goa-card-inner">
+            <div class="goa-img-wrap">
+              <img src="website_media/product_images/theclassic.webp" alt="The Classic" class="goa-img" />
+              <div class="goa-img-overlay"></div>
+              <div class="goa-shop-btn">
+                <span>Shop Now</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:0.5rem;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </div>
+            </div>
+            <div class="goa-card-body">
+              <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:0.375rem;">
+                <h3 class="font-heading goa-card-title">The Classic</h3>
+                <span class="font-body goa-card-price">$ 2,250 MXN</span>
+              </div>
+              <p class="font-body goa-card-sub">Goa Magic / Swimsuits</p>
+              <div class="goa-card-bar"></div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Side Cut -->
+        <a href="#PRODUCT_URL_SIDECUT" class="goa-card reveal" style="text-decoration:none; display:block; color:inherit; transition-delay:0.12s;">
+          <div class="goa-card-inner">
+            <div class="goa-img-wrap">
+              <img src="website_media/product_images/sidecut.webp" alt="Side Cut" class="goa-img" />
+              <div class="goa-img-overlay"></div>
+              <div class="goa-shop-btn">
+                <span>Shop Now</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:0.5rem;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </div>
+            </div>
+            <div class="goa-card-body">
+              <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:0.375rem;">
+                <h3 class="font-heading goa-card-title">Side Cut</h3>
+                <span class="font-body goa-card-price">$ 2,250 MXN</span>
+              </div>
+              <p class="font-body goa-card-sub">Goa Magic / Swimsuits</p>
+              <div class="goa-card-bar"></div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Back Cut -->
+        <a href="#PRODUCT_URL_BACKCUT" class="goa-card reveal" style="text-decoration:none; display:block; color:inherit; transition-delay:0.24s;">
+          <div class="goa-card-inner">
+            <div class="goa-img-wrap">
+              <img src="website_media/product_images/backcut.webp" alt="Back Cut" class="goa-img" />
+              <div class="goa-img-overlay"></div>
+              <div class="goa-shop-btn">
+                <span>Shop Now</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:0.5rem;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </div>
+            </div>
+            <div class="goa-card-body">
+              <div style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:0.375rem;">
+                <h3 class="font-heading goa-card-title">Back Cut</h3>
+                <span class="font-body goa-card-price">$ 2,250 MXN</span>
+              </div>
+              <p class="font-body goa-card-sub">Goa Magic / Swimsuits</p>
+              <div class="goa-card-bar"></div>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <div style="text-align:center; margin-top:3.5rem;" class="reveal">
+        <a href="#" class="btn-dark-outline">View Full Collection</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       BRAND STORY
+  ══════════════════════════════════════ -->
+  <section id="story" style="padding: 7rem 2rem; background: #F7F2EC;">
+    <div style="max-width:1100px; margin:0 auto; display:grid; grid-template-columns: 1fr 1fr; gap:5rem; align-items:center;">
+
+      <!-- Image side -->
+      <div class="reveal" style="position:relative;">
+        <div style="position:relative; overflow:hidden; background:#4B6E8C;">
+          <img
+            src="https://placehold.co/580x720/2C332E/AB856C?text=Uranta+Story"
+            alt="Our Story"
+            style="width:100%; display:block; object-fit:cover;"
+          />
+          <!-- Color treatment -->
+          <div style="position:absolute; inset:0; background: rgba(171,133,108,0.18); mix-blend-mode: multiply;"></div>
+          <div style="position:absolute; inset:0; background: linear-gradient(to bottom, transparent 50%, rgba(44,51,46,0.5));"></div>
+        </div>
+        <!-- Accent block -->
+        <div style="
+          position: absolute;
+          bottom: -1.75rem;
+          right: -1.75rem;
+          width: 50%;
+          height: 50%;
+          border: 1.5px solid #AB856C;
+          opacity: 0.35;
+          pointer-events: none;
+        "></div>
+      </div>
+
+      <!-- Text side -->
+      <div class="reveal" style="transition-delay:0.15s;">
+        <p class="section-label">Our Story</p>
+        <div style="width:2.5rem; height:1px; background:#AB856C; margin:1.25rem 0;"></div>
+        <h2 class="section-title" style="font-size: clamp(1.875rem,3.5vw,2.75rem); margin-bottom:1.75rem;">
+          Born from the mat,<br /><em>made for life.</em>
+        </h2>
+        <p class="font-body" style="font-size:1rem; line-height:1.8; color:#716A50; margin-bottom:1.25rem;">
+          Uranta was born from a simple belief: the clothes you wear during practice should carry the same intention as the practice itself. Purposeful, grounded, and beautifully made.
+        </p>
+        <p class="font-body" style="font-size:1rem; line-height:1.8; color:#716A50; margin-bottom:2.5rem;">
+          We work with ethical artisans and sustainable materials to create pieces that feel as good as they look — whether you are moving through a flow or moving through the world.
+        </p>
+        <a href="#" class="btn-primary" style="background:#2C332E; color:#F7F2EC; border-color:#2C332E;">Learn More</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       FULL-WIDTH BANNER
+  ══════════════════════════════════════ -->
+  <section style="
+    position: relative;
+    padding: 7rem 2rem;
+    overflow: hidden;
+    text-align: center;
+  ">
+    <!-- Background image -->
+    <div style="
+      position: absolute;
+      inset: 0;
+      background-image: url('website_media/IMG_5027.webp');
+      background-size: cover;
+      background-position: center 30%;
+      background-repeat: no-repeat;
+    "></div>
+    <!-- Overlay to darken image and add brand tint -->
+    <div style="
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 70%, rgba(193,122,78,0.3) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 30%, rgba(75,110,140,0.2) 0%, transparent 55%),
+        linear-gradient(to bottom, rgba(44,51,46,0.55) 0%, rgba(44,51,46,0.45) 50%, rgba(44,51,46,0.65) 100%);
+    "></div>
+    <div style="position:relative; z-index:1; max-width:700px; margin:0 auto;" class="reveal">
+      <!-- Logo mark -->
+      <img
+        src="brand_assets/uranta_logo.png"
+        alt="Uranta"
+        style="height:80px; width:auto; margin:0 auto 2.5rem; filter: invert(1); mix-blend-mode: screen; opacity:0.9;"
+      />
+      <h2 class="font-heading text-cream" style="font-size: clamp(2rem,5vw,3.5rem); font-weight:300; letter-spacing:-0.02em; line-height:1.15; margin-bottom:1.5rem;">
+        "Aligned in Balance.<br /><em>In Beauty."</em>
+      </h2>
+      <p class="font-body" style="font-size:1.0625rem; line-height:1.75; color:rgba(247,242,236,0.65); margin-bottom:2.75rem; max-width:460px; margin-left:auto; margin-right:auto;">
+        Join a community of women who honour their bodies, their practice, and the planet.
+      </p>
+      <a href="#" class="btn-primary" style="background:#AB856C; border-color:#AB856C; color:#F7F2EC;">
+        Explore the Collection
+      </a>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       TESTIMONIALS
+  ══════════════════════════════════════ -->
+  <section style="padding: 7rem 2rem; background: #EDE6DC;">
+    <div style="max-width: 1100px; margin: 0 auto;">
+      <div style="text-align:center; margin-bottom:4rem;">
+        <p class="section-label reveal">From Our Community</p>
+        <div class="divider reveal"></div>
+        <h2 class="section-title reveal" style="font-size: clamp(1.875rem,3.5vw,2.75rem);">Words from the mat</h2>
+      </div>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:2rem;">
+
+        <div class="testimonial-card reveal">
+          <div style="display:flex; gap:0.25rem; margin-bottom:1.25rem;">
+            <span style="color:#C17A4E; font-size:0.9rem;">★★★★★</span>
+          </div>
+          <p class="font-body" style="font-size:1rem; line-height:1.8; color:#2C332E; margin-bottom:1.5rem; padding-top:1rem;">
+            "These leggings moved with me through every warrior pose. I've never felt so confident and comfortable in a class before."
+          </p>
+          <div style="display:flex; align-items:center; gap:0.875rem;">
+            <img src="https://placehold.co/40x40/AB856C/F7F2EC?text=S" alt="Sofia" style="border-radius:50%; width:40px; height:40px;" />
+            <div>
+              <p class="font-body" style="font-size:0.875rem; font-weight:700; color:#2C332E; margin:0;">Sofia M.</p>
+              <p class="font-body" style="font-size:0.8rem; color:#716A50; margin:0;">Yoga Teacher, Barcelona</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card reveal" style="transition-delay:0.12s;">
+          <div style="display:flex; gap:0.25rem; margin-bottom:1.25rem;">
+            <span style="color:#C17A4E; font-size:0.9rem;">★★★★★</span>
+          </div>
+          <p class="font-body" style="font-size:1rem; line-height:1.8; color:#2C332E; margin-bottom:1.5rem; padding-top:1rem;">
+            "Finally a brand that gets it. The fabrics are breathable, the design is stunning, and I feel good knowing it's made ethically."
+          </p>
+          <div style="display:flex; align-items:center; gap:0.875rem;">
+            <img src="https://placehold.co/40x40/4B6E8C/F7F2EC?text=L" alt="Lena" style="border-radius:50%; width:40px; height:40px;" />
+            <div>
+              <p class="font-body" style="font-size:0.875rem; font-weight:700; color:#2C332E; margin:0;">Lena K.</p>
+              <p class="font-body" style="font-size:0.8rem; color:#716A50; margin:0;">Wellness Coach, London</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card reveal" style="transition-delay:0.24s;">
+          <div style="display:flex; gap:0.25rem; margin-bottom:1.25rem;">
+            <span style="color:#C17A4E; font-size:0.9rem;">★★★★★</span>
+          </div>
+          <p class="font-body" style="font-size:1rem; line-height:1.8; color:#2C332E; margin-bottom:1.5rem; padding-top:1rem;">
+            "The Namaste Wrap is my go-to for everything. From morning practice to afternoon coffee — it is simply perfect."
+          </p>
+          <div style="display:flex; align-items:center; gap:0.875rem;">
+            <img src="https://placehold.co/40x40/716A50/F7F2EC?text=A" alt="Amara" style="border-radius:50%; width:40px; height:40px;" />
+            <div>
+              <p class="font-body" style="font-size:0.875rem; font-weight:700; color:#2C332E; margin:0;">Amara T.</p>
+              <p class="font-body" style="font-size:0.8rem; color:#716A50; margin:0;">Pilates Instructor, Paris</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       NEWSLETTER
+  ══════════════════════════════════════ -->
+  <section style="
+    padding: 7rem 2rem;
+    background:
+      radial-gradient(ellipse 70% 60% at 85% 50%, rgba(75,110,140,0.2) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 15% 50%, rgba(193,122,78,0.2) 0%, transparent 55%),
+      #2C332E;
+  ">
+    <div style="max-width:580px; margin:0 auto; text-align:center;" class="reveal">
+      <p class="section-label" style="color:#AB856C;">Stay Connected</p>
+      <div style="width:2.5rem; height:1px; background:#AB856C; margin:1.25rem auto;"></div>
+      <h2 class="font-heading" style="font-size: clamp(1.875rem,3.5vw,2.75rem); font-weight:300; letter-spacing:-0.02em; color:#F7F2EC; margin-bottom:1rem;">
+        Join the Uranta Circle
+      </h2>
+      <p class="font-body" style="font-size:1rem; line-height:1.75; color:rgba(247,242,236,0.6); margin-bottom:3rem;">
+        Be the first to discover new collections, exclusive offers, and inspiration for your practice.
+      </p>
+      <form style="display:flex; gap:0; max-width:460px; margin:0 auto;" onsubmit="return false;">
+        <div style="flex:1; border-bottom:1.5px solid rgba(247,242,236,0.25);">
+          <input
+            type="email"
+            placeholder="Your email address"
+            class="newsletter-input"
+            style="width:100%;"
+          />
+        </div>
+        <button type="submit" class="btn-primary" style="margin-left:1.25rem; white-space:nowrap; background:#AB856C; border-color:#AB856C;">
+          Subscribe
+        </button>
+      </form>
+      <p class="font-body" style="font-size:0.8rem; color:rgba(247,242,236,0.35); margin-top:1.25rem; letter-spacing:0.04em;">
+        No spam. Unsubscribe anytime. We honour your privacy.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       FOOTER
+  ══════════════════════════════════════ -->
+  <footer style="background:#1e2420; padding:4rem 2rem 2.5rem; color:rgba(247,242,236,0.55);">
+    <div style="max-width:1100px; margin:0 auto;">
+
+      <!-- Top row -->
+      <div style="display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:3rem; padding-bottom:3rem; border-bottom:1px solid rgba(247,242,236,0.08);">
+
+        <!-- Brand -->
+        <div>
+          <img
+            src="brand_assets/uranta_logo.png"
+            alt="Uranta"
+            style="height:60px; width:auto; filter: invert(1); mix-blend-mode: screen; opacity:0.8; margin-bottom:1.25rem;"
+          />
+          <p class="font-body" style="font-size:0.9rem; line-height:1.75; max-width:220px;">
+            Yoga apparel crafted with intention, for the body in motion and the life well lived.
+          </p>
+        </div>
+
+        <!-- Links -->
+        <div>
+          <p class="font-body" style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(247,242,236,0.35); margin-bottom:1.25rem;">Collections</p>
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.625rem;">
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'">Leggings</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'">Sports Bras</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'">Outerwear</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'">Accessories</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="font-body" style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(247,242,236,0.35); margin-bottom:1.25rem;">Company</p>
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.625rem;">
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'">Our Story</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'">Sustainability</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'">Careers</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'">Press</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="font-body" style="font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(247,242,236,0.35); margin-bottom:1.25rem;">Support</p>
+          <ul style="list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:0.625rem;">
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'">Size Guide</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'">Returns</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'">Shipping</a></li>
+            <li><a href="#" class="font-body" style="font-size:0.9rem; color:rgba(247,242,236,0.55); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.55)'">Contact</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom row -->
+      <div style="padding-top:2rem; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+        <p class="font-body" style="font-size:0.8rem;">© 2026 Uranta. All rights reserved.</p>
+        <div style="display:flex; gap:1.5rem;">
+          <a href="#" class="font-body" style="font-size:0.8rem; color:rgba(247,242,236,0.4); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'">Privacy</a>
+          <a href="#" class="font-body" style="font-size:0.8rem; color:rgba(247,242,236,0.4); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'">Terms</a>
+          <a href="#" class="font-body" style="font-size:0.8rem; color:rgba(247,242,236,0.4); text-decoration:none;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'">Cookies</a>
+        </div>
+        <!-- Social icons -->
+        <div style="display:flex; gap:1rem; align-items:center;">
+          <a href="#" style="color:rgba(247,242,236,0.4); transition:color 0.2s;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+          </a>
+          <a href="#" style="color:rgba(247,242,236,0.4); transition:color 0.2s;" onmouseover="this.style.color='#AB856C'" onmouseout="this.style.color='rgba(247,242,236,0.4)'">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- ══════════════════════════════════════
+       JS: Nav scroll + scroll-reveal
+  ══════════════════════════════════════ -->
+  <script>
+    // Nav scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // Scroll reveal — only activate after a tiny delay so paint happens first
+    requestAnimationFrame(() => {
+      document.body.classList.add('js-ready');
+      const reveals = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.08, rootMargin: '0px 0px -20px 0px' });
+      reveals.forEach(el => observer.observe(el));
+    });
+  </script>
+
+</body>
+</html>
